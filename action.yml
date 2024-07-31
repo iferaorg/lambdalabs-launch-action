@@ -1,0 +1,62 @@
+---
+name: "Launch LambdaLabs Instance"
+description: "Launches a Lambda Labs cloud instance using environment settings."
+inputs:
+  instance_type_name:
+    description: "The type of instance to launch"
+    required: true
+  region_name:
+    description: "The region to launch the instance in"
+    required: true
+  ssh_key_names:
+    description: "The SSH key names to use for the instance"
+    required: true
+  file_system_names:
+    description: "The file system names to attach to the instance (optional)"
+    required: false
+    default: ""
+  name:
+    description: "The name of the instance (optional)"
+    required: false
+    default: ""
+  lambda_token:
+    description: "The LambdaLabs API token"
+    required: true
+outputs:
+  instance_ids:
+    description: "The IDs of the launched instances"
+    value: ${{ steps.launch-instance.outputs.instance_ids }}
+runs:
+  using: "composite"
+  steps:
+    - name: Copy requirements
+      run: cp ${{ github.action_path }}/requirements.txt .tmp-ifera-lambdalabs-launch-instance-action-requirements.txt
+      shell: bash
+
+    - name: Set up Python
+      id: setup-python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: "pip"
+        cache-dependency-path: .tmp-ifera-lambdalabs-launch-instance-action-requirements.txt
+
+    - name: Install dependencies
+      run: pip install -r ${{ github.action_path }}/requirements.txt
+      shell: bash
+
+    - name: Launch Instance
+      id: launch-instance
+      run: python ${{ github.action_path }}/launch_instance.py
+      shell: bash
+      env:
+        INSTANCE_TYPE_NAME: ${{ inputs.instance_type_name }}
+        REGION_NAME: ${{ inputs.region_name }}
+        SSH_KEY_NAMES: ${{ inputs.ssh_key_names }}
+        FILE_SYSTEM_NAMES: ${{ inputs.file_system_names }}
+        NAME: ${{ inputs.name }}
+        LAMBDA_TOKEN: ${{ inputs.lambda_token }}
+
+    - name: Clean up
+      run: rm -f .tmp-ifera-lambdalabs-launch-instance-action-requirements.txt
+      shell: bash
