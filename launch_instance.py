@@ -1,4 +1,5 @@
 """Launch a Lambda Labs cloud instance from environment settings."""
+
 import os
 import sys
 
@@ -11,7 +12,7 @@ def get_and_validate_env_vars():
     region_name = os.getenv("REGION_NAME", "").lower()
     ssh_key_names = os.getenv("SSH_KEY_NAMES")
     file_system_names = os.getenv("FILE_SYSTEM_NAMES")  # Optional
-    name = os.getenv("NAME", "")                        # Optional
+    name = os.getenv("NAME", "")  # Optional
     lambda_token = os.getenv("LAMBDA_TOKEN")
 
     required_env_vars = {
