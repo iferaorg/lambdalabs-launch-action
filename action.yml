@@ -22,6 +22,14 @@ inputs:
   lambda_token:
     description: "The LambdaLabs API token"
     required: true
+  wait_for_boot:
+    description: "Whether to wait for the instance to boot"
+    required: false
+    default: "false"
+  boot_timeout:
+    description: "The timeout in seconds to wait for the instance to boot"
+    required: false
+    default: "300"
 outputs:
   instance_ids:
     description: "The IDs of the launched instances"
@@ -56,6 +64,8 @@ runs:
         FILE_SYSTEM_NAMES: ${{ inputs.file_system_names }}
         NAME: ${{ inputs.name }}
         LAMBDA_TOKEN: ${{ inputs.lambda_token }}
+        WAIT_FOR_BOOT: ${{ inputs.wait_for_boot }}
+        BOOT_TIMEOUT: ${{ inputs.boot_timeout }}
 
     - name: Clean up
       run: rm -f .tmp-ifera-lambdalabs-launch-instance-action-requirements.txt

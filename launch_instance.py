@@ -2,6 +2,7 @@
 
 import os
 import sys
+import time
 
 import requests
 
@@ -76,9 +77,40 @@ def handle_response(response):
     else:
         raise ValueError("GITHUB_OUTPUT environment variable is not set.")
 
+    return instance_id
+
+
+def wait_for_boot(instance_id, lambda_token):
+    """Wait for the instance to boot."""
+    if not os.getenv("WAIT_FOR_BOOT", "false") == "true":
+        return
+
+    timeout = int(os.getenv("BOOT_TIMEOUT", "300"))
+    start_time = time.time()
+    url = f"https://cloud.lambdalabs.com/api/v1/instances/{instance_id}"
+    headers = {"Authorization": f"Bearer {lambda_token}"}
+
+    while True:
+        response = requests.get(url, headers=headers, timeout=10)
+        instance_status = response.json().get("data", {}).get("status")
+        if instance_status != "booting":
+            break
+        if time.time() - start_time > timeout:
+            raise TimeoutError("Instance boot timeout reached.")
+        time.sleep(5)  # Sleep for a short period before retrying
+
+    # Status is now "active" or "unhealthy". Raise an error if unhealthy.
+    if instance_status == "unhealthy":
+        raise ValueError("Instance is unhealthy.")
+
+    total_time = time.time() - start_time
+    print(f"Instance booted in {total_time:.2f} seconds.")
+
 
 def main():
     """Launch a Lambda Labs cloud instance from environment settings."""
     instance_params, lambda_token = get_and_validate_env_vars()
     response = launch_instance(instance_params, lambda_token)
-    handle_response(response)
+    instance_id = handle_response(response)
+    if instance_id:
+        wait_for_boot(instance_id, lambda_token)
