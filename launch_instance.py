@@ -64,7 +64,7 @@ def handle_response(response):
         sys.exit(1)
 
     # Get data/instance_ids from response
-    instance_ids = response.json().get("data", {}).get("instance_ids", [])
+    instance_id = response.json().get("data", {}).get("instance_ids", [])[0]
 
     # Get the path to the GITHUB_OUTPUT environment file
     output_file_path = os.getenv("GITHUB_OUTPUT")
@@ -72,7 +72,7 @@ def handle_response(response):
     # Write the output to the GITHUB_OUTPUT environment file
     if output_file_path is not None:
         with open(output_file_path, "a", encoding="utf-8") as file:
-            file.write(f"instance_ids={instance_ids}\n")
+            file.write(f"instance_id={instance_id}\n")
     else:
         raise ValueError("GITHUB_OUTPUT environment variable is not set.")
 
