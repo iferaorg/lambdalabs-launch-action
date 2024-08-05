@@ -103,7 +103,7 @@ def wait_for_boot(instance_id, lambda_token):
     print("Waiting for instance to boot...")
 
     while True:
-        print('.', end='', flush=True)
+        print(".", end="", flush=True)
         response = requests.get(url, headers=headers, timeout=10)
         instance_status = response.json().get("data", {}).get("status")
         if instance_status != "booting":
