@@ -65,9 +65,7 @@ def handle_response(response):
         sys.exit(1)
 
     # Get data/instance_ids from response
-    print(response.json())
     data = response.json().get("data", {})
-    print(data)
     instance_id = data.get("instance_ids", [])[0]
 
     # Get the path to the GITHUB_OUTPUT environment file
@@ -113,8 +111,11 @@ def wait_for_boot(instance_id, lambda_token):
 def main():
     """Launch a Lambda Labs cloud instance from environment settings."""
     instance_params, lambda_token = get_and_validate_env_vars()
-    print(instance_params)
     response = launch_instance(instance_params, lambda_token)
     instance_id = handle_response(response)
     if instance_id:
         wait_for_boot(instance_id, lambda_token)
+
+
+if __name__ == "__main__":
+    main()
