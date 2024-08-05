@@ -19,7 +19,7 @@ def get_and_validate_env_vars():
     required_env_vars = {
         "LAMBDA_TOKEN": lambda_token,
         "INSTANCE_TYPE_NAME": instance_type_name,
-        "REGION_NAME": region_name
+        "REGION_NAME": region_name,
     }
 
     for var_name, var_value in required_env_vars.items():
