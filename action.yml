@@ -31,9 +31,9 @@ inputs:
     required: false
     default: "300"
 outputs:
-  instance_ids:
-    description: "The IDs of the launched instances"
-    value: ${{ steps.launch-instance.outputs.instance_ids }}
+  instance_id:
+    description: "The ID of the launched instance"
+    value: ${{ steps.launch-instance.outputs.instance_id }}
 runs:
   using: "composite"
   steps:
