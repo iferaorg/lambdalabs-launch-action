@@ -65,6 +65,7 @@ def handle_response(response):
         sys.exit(1)
 
     # Get data/instance_ids from response
+    print(response.json())
     data = response.json().get("data", {})
     print(data)
     instance_id = data.get("instance_ids", [])[0]
