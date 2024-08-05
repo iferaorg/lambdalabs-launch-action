@@ -95,7 +95,7 @@ def wait_for_boot(instance_id, lambda_token):
     if not os.getenv("WAIT_FOR_BOOT", "false") == "true":
         return
 
-    timeout = int(os.getenv("BOOT_TIMEOUT", "300"))
+    timeout = int(os.getenv("BOOT_TIMEOUT", "600"))
     start_time = time.time()
     url = f"https://cloud.lambdalabs.com/api/v1/instances/{instance_id}"
     headers = {"Authorization": f"Bearer {lambda_token}"}
@@ -117,7 +117,7 @@ def wait_for_boot(instance_id, lambda_token):
         raise ValueError("Instance is unhealthy.")
 
     total_time = time.time() - start_time
-    print(f"Instance booted in {total_time:.2f} seconds.")
+    print(f"\nInstance booted in {total_time:.2f} seconds.")
 
 
 def main():
