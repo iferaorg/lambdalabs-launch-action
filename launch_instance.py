@@ -113,6 +113,7 @@ def wait_for_boot(instance_id, lambda_token):
 def main():
     """Launch a Lambda Labs cloud instance from environment settings."""
     instance_params, lambda_token = get_and_validate_env_vars()
+    print(instance_params)
     response = launch_instance(instance_params, lambda_token)
     instance_id = handle_response(response)
     if instance_id:
