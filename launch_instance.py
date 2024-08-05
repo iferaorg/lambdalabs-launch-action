@@ -19,13 +19,22 @@ def get_and_validate_env_vars():
     required_env_vars = {
         "LAMBDA_TOKEN": lambda_token,
         "INSTANCE_TYPE_NAME": instance_type_name,
-        "REGION_NAME": region_name,
-        "SSH_KEY_NAMES": ssh_key_names,
+        "REGION_NAME": region_name
     }
 
     for var_name, var_value in required_env_vars.items():
         if not var_value:
             raise ValueError(f"{var_name} environment variable is not set")
+
+    if ssh_key_names:
+        ssh_key_names = ssh_key_names.split(",")
+    else:
+        raise ValueError("SSH_KEY_NAMES environment variable is not set")
+
+    if file_system_names:
+        file_system_names = file_system_names.split(",")
+    else:
+        file_system_names = []
 
     instance_params = {
         "instance_type_name": instance_type_name,
