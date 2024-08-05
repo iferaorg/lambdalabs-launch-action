@@ -29,7 +29,7 @@ inputs:
   boot_timeout:
     description: "The timeout in seconds to wait for the instance to boot"
     required: false
-    default: "300"
+    default: "600"
 outputs:
   instance_id:
     description: "The ID of the launched instance"
