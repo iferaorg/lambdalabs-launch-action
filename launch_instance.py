@@ -56,7 +56,7 @@ def launch_instance(instance_params, lambda_token):
         url,
         headers=headers,
         json=instance_params,
-        timeout=10,
+        timeout=300,
     )
 
     return response
