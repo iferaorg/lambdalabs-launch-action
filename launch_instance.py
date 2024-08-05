@@ -100,7 +100,10 @@ def wait_for_boot(instance_id, lambda_token):
     url = f"https://cloud.lambdalabs.com/api/v1/instances/{instance_id}"
     headers = {"Authorization": f"Bearer {lambda_token}"}
 
+    print("Waiting for instance to boot...")
+
     while True:
+        print('.', end='', flush=True)
         response = requests.get(url, headers=headers, timeout=10)
         instance_status = response.json().get("data", {}).get("status")
         if instance_status != "booting":
