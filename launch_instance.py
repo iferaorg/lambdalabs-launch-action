@@ -65,7 +65,9 @@ def handle_response(response):
         sys.exit(1)
 
     # Get data/instance_ids from response
-    instance_id = response.json().get("data", {}).get("instance_ids", [])[0]
+    data = response.json().get("data", {})
+    print(data)
+    instance_id = data.get("instance_ids", [])[0]
 
     # Get the path to the GITHUB_OUTPUT environment file
     output_file_path = os.getenv("GITHUB_OUTPUT")
